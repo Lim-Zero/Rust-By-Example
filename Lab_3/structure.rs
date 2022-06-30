@@ -1,36 +1,50 @@
 #[derive(Debug)]
-struct Person<'a> {
-    name: &'a str,
+struct Person {
+    name: String,
     age: u8,
 }
-struct Nil;
+struct Unit;
 struct Pair(i32, f32);
+#[derive(Debug)]
 struct Point {
     x: f32,
     y: f32,
 }
-#[allow(dead_code)]
+#[derive(Debug)]
 struct Rectangle {
-    p1: Point,
-    p2: Point,
+    top_left: Point,
+    bottom_right: Point,
 }
 fn main() {
-    let name = "Peter";
+    let name = String::from("Peter");
     let age = 27;
     let peter = Person { name, age };
     println!("{:?}", peter);
-    let point: Point = Point { x: 0.3, y: 0.4 };
+    let point: Point = Point { x: 10.3, y: 0.4 };
     println!("point coordinates: ({}, {})", point.x, point.y);
-    let new_point = Point { x: 0.1, ..point };
-    println!("second point: ({}, {})", new_point.x, new_point.y);
-    let Point { x: my_x, y: my_y } = point;
+    let bottom_right = Point { x: 5.2, ..point };
+    println!("second point: ({}, {})", bottom_right.x, bottom_right.y);
+    let Point { x: left_edge, y: top_edge } = point;
     let _rectangle = Rectangle {
-        p1: Point { x: my_y, y: my_x },
-        p2: point,
+        top_left: Point { x: left_edge, y: top_edge },
+        bottom_right: bottom_right,
     };
-    let _nil = Nil;
+    let _unit = Unit;
     let pair = Pair(1, 0.1);
     println!("pair contains {:?} and {:?}", pair.0, pair.1);
     let Pair(integer, decimal) = pair;
     println!("pair contains {:?} and {:?}", integer, decimal);
+    println!("{:?}",rect_area(square(point,7.0)))
+}
+fn rect_area( rectangle: Rectangle) -> f32 {
+    let Rectangle {top_left: pl ,bottom_right: pr} = rectangle;
+    (pr.x - pl.x) * (pl.y - pr.y)
+}
+fn square( top_left: Point, length: f32) -> Rectangle {
+    let mut _x = top_left.x;
+    let mut _y = top_left.y;
+    Rectangle {
+        top_left: Point {x:_x, y: _y},
+        bottom_right: Point { x: (_x + length), y: (_y - length)}
+    }
 }
