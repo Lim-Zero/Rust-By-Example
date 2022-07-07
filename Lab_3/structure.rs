@@ -44,7 +44,7 @@ fn square( top_left: Point, length: f32) -> Rectangle {
     let mut _x = top_left.x;
     let mut _y = top_left.y;
     Rectangle {
-        top_left: Point {x:_x, y: _y},
+        top_left,
         bottom_right: Point { x: (_x + length), y: (_y - length)}
     }
 }
